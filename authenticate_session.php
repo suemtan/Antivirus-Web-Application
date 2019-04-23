@@ -30,11 +30,13 @@
 				echo "$row[0] $row[1]: Hi $row[0], you are now logged in as $row[2]";
 				die ("<p><a href=continue.php> Click here to continue</a> </p>");
 			}
+			//Attacker won't be able to know whether username or/and password
 			else die("Invalid username/password combination");
 		}
 		else die("Invalid username/password combination");
 	}
 	else 	{
+		//warning
 		header("WWW-Authenticate: Basic realm='Restricted Section'");
 		header('HTTP/1.0 401 Unauthorized');
 		die ("Please enter your username and password");
@@ -44,10 +46,12 @@
 	$connection->close();
 	function mysql_entities_fix_string($connection, $string)
 	{
+		//remove any html from a string such as <b>hi</b> into &lt;b&gt;hi&lt;/b&gt;
 		return htmlentities(mysql_fix_string($connection, $string));
 	}
 	function mysql_fix_string($connection, $string)
 	{
+		//sanitize the string; Affects HTTP Request data (GET, POST, and COOKIE)
 		if (get_magic_quotes_gpc()) $string = stripslashes($string);
 		return $connection->real_escape_string($string);
 	}
